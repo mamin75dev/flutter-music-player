@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controllers/player_controller.dart';
 import 'package:music_player/ui/resources/styles/text_style.dart';
+import 'package:music_player/ui/screens/player_screen.dart';
 import 'package:music_player/ui/widgets/music_item.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -44,6 +45,13 @@ class _MusicsListState extends State<MusicsList> {
                 id: snapshot.data![index].id,
                 title: snapshot.data![index].title,
                 subTitle: "${snapshot.data![index].artist}",
+                onMusicItemPressed: () {
+                  Get.to(() => PlayerScreen(songs: snapshot.data!));
+                  controller.playSong(snapshot.data![index].uri, index);
+                },
+                index: index,
+                playIndex: controller.playIndex,
+                isPlaying: controller.isPlaying.value,
               );
             },
           );
