@@ -7,6 +7,13 @@ class MusicPlayerAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: const Icon(Icons.sort_rounded),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {},
+        ),
+      ],
       title: Text("Music Player", style: titleStyle()),
     );
   }
