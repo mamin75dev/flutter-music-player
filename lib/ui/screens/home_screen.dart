@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/ui/widgets/app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: const MusicPlayerAppBar(),
+      body: Container(),
+    );
   }
 }
