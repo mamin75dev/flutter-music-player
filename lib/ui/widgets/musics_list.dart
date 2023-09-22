@@ -1,43 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/ui/resources/styles/box_shadow.dart';
+import 'package:get/get.dart';
+import 'package:music_player/controllers/player_controller.dart';
 import 'package:music_player/ui/resources/styles/text_style.dart';
+import 'package:music_player/ui/widgets/music_item.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
-class MusicsList extends StatelessWidget {
-  const MusicsList({
-    super.key,
-  });
+class MusicsList extends StatefulWidget {
+  const MusicsList({super.key});
+
+  @override
+  State<MusicsList> createState() => _MusicsListState();
+}
+
+class _MusicsListState extends State<MusicsList> {
+  var controller = Get.put(PlayerController());
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsetsDirectional.only(bottom: 6.0),
-          child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+    return FutureBuilder(
+      future: controller.audioQuery.querySongs(
+        ignoreCase: true,
+        orderType: OrderType.ASC_OR_SMALLER,
+        sortType: null,
+        uriType: UriType.EXTERNAL,
+      ),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.data == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.data!.isEmpty) {
+          return Center(
+            child: Text(
+              "No songs available!!",
+              style: titleStyle(),
             ),
-            tileColor: Colors.black12,
-            title: Text(
-              "Music Name",
-              style: textStyle(
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(
-              "Artist Name",
-              style: textStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.normal,
-                color: Colors.black54,
-              ),
-            ),
-            leading: const Icon(Icons.music_note, size: 30),
-            trailing: const Icon(Icons.play_arrow, size: 28),
-          ),
-        );
+          );
+        } else {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return MusicItem(
+                id: snapshot.data![index].id,
+                title: snapshot.data![index].title,
+                subTitle: "${snapshot.data![index].artist}",
+              );
+            },
+          );
+        }
       },
     );
   }
